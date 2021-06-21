@@ -61,7 +61,7 @@ adherence_dat <- map_df(pids, ~ {
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Midpoint Ax`)) %>%
     group_by(`Participant Study ID`) %>%
-    summarize(m1_all_sess = n())
+    summarize(m1_all_hs_sess = n())
 
   mo2_mm <- dat %>%
     filter(`Participant Study ID` == .x,
@@ -79,7 +79,7 @@ adherence_dat <- map_df(pids, ~ {
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Midpoint Ax`,
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`)) %>%
     group_by(`Participant Study ID`) %>%
-    summarize(m2_all_sess = n())
+    summarize(m2_all_hs_sess = n())
 
   mo3_mm <- dat %>%
     filter(`Participant Study ID` == .x,
@@ -97,7 +97,7 @@ adherence_dat <- map_df(pids, ~ {
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`,
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`1-Mo F/U Ax`)) %>%
     group_by(`Participant Study ID`) %>%
-    summarize(m3_all_sess = n())
+    summarize(m3_all_hs_sess = n())
 
   t3_cum_mm <- dat %>%
     filter(`Participant Study ID` == .x,
@@ -115,7 +115,7 @@ adherence_dat <- map_df(pids, ~ {
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`)) %>%
     group_by(`Participant Study ID`) %>%
-    summarize(t3_all_sess = n())
+    summarize(t3_all_hs_sess = n())
 
   t4_cum_mm <- dat %>%
     filter(`Participant Study ID` == .x,
@@ -133,19 +133,68 @@ adherence_dat <- map_df(pids, ~ {
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
                    timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`1-Mo F/U Ax`)) %>%
     group_by(`Participant Study ID`) %>%
-    summarize(t4_all_sess = n())
+    summarize(t4_all_hs_sess = n())
 
   full_join(all_mm, all_hs, by = "Participant Study ID") %>%
     full_join(mo1_mm, by = "Participant Study ID") %>%
+    full_join(mo1_all, by = "Participant Study ID") %>%
     full_join(mo2_mm, by = "Participant Study ID") %>%
+    full_join(mo2_all, by = "Participant Study ID") %>%
     full_join(mo3_mm, by = "Participant Study ID") %>%
+    full_join(mo3_all, by = "Participant Study ID") %>%
     full_join(t3_cum_mm, by = "Participant Study ID") %>%
+    full_join(t3_all, by = "Participant Study ID") %>%
     full_join(t4_cum_mm, by = "Participant Study ID") %>%
+    full_join(t4_all, by = "Participant Study ID") %>%
     mutate(
       across(.cols = everything(),
              .fns = ~ replace_na(.x, 0))
     )
 })
+
+# merge with timeline data
+adherence_dat <- full_join(adherence_dat, timeline_dat, by = "Participant Study ID")
+
+# deal with missing values
+adherence_dat <- adherence_dat %>%
+  mutate(
+   across(
+    .cols = c(m1_mind_min, m1_mind_sess, m1_all_hs_sess),
+    .fns = ~ ifelse(
+    is.na(`Midpoint Ax`),
+    NA,
+    .x
+  )),
+   across(
+    .cols = c(m2_mind_min, m2_mind_sess, m2_all_hs_sess, t3_cum_mind_min, t3_cum_mind_sess, t3_all_hs_sess),
+    .fns = ~ ifelse(
+      is.na(`Post Ax`),
+      NA,
+      .x
+  )),
+   across(
+     .cols = c(m3_mind_min, m3_mind_sess, m3_all_hs_sess, t4_cum_mind_min, t4_cum_mind_sess, t4_all_hs_sess),
+     .fns = ~ ifelse(
+       is.na(`1-Mo F/U Ax`),
+       NA,
+       .x
+  ))
+)
+
+# create average variables
+adherence_dat <- adherence_dat %>%
+  mutate(m1_avg_mind_sess_len = m1_mind_min / m1_mind_sess,
+         m2_avg_mind_sess_len = m2_mind_min / m2_mind_sess,
+         m3_avg_mind_sess_len = m3_mind_min / m3_mind_sess,
+         t3_avg_mind_sess_len = t3_cum_mind_min / t3_cum_mind_sess,
+         t4_avg_mind_sess_len = t4_cum_mind_min / t4_cum_mind_sess,
+         all_avg_mind_sess_len = all_mind_min / all_mind_sess) %>%
+  relocate(all_mind_min, all_mind_sess, all_avg,
+           all_hs_sess, m1_mind_min, m1_mind_sess, m1_all_hs_sess,
+           m1_avg, m2_mind_min, m2_mind_sess, m2_all_hs_sess, m2_avg,
+           m3_mind_min, m3_mind_sess, m3_all_hs_sess, m3_avg,
+           t3_cum_mind_min, t3_cum_mind_sess, t3_all_hs_sess, t3_avg,
+           t4_cum_mind_min, t4_cum_mind_sess, t4_all_hs_sess, t4_avg)
 
 # save csv file
 write_csv(adherence_dat, "adherence_metric_data.csv")
