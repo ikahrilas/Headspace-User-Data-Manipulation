@@ -48,8 +48,8 @@ adherence_dat <-
       filter(`Participant Study ID` == .x,
              `Mindfulness or Other (new column)` == "Mindfulness",
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Midpoint Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Code Activation`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Midpoint Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(m1_mind_min = sum(Duration, na.rm = TRUE),
                 m1_mind_sess = n())
@@ -57,8 +57,8 @@ adherence_dat <-
     mo1_all <- dat %>%
       filter(`Participant Study ID` == .x,
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Midpoint Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Code Activation`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Midpoint Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(m1_all_hs_sess = n())
 
@@ -66,8 +66,8 @@ adherence_dat <-
       filter(`Participant Study ID` == .x,
              `Mindfulness or Other (new column)` == "Mindfulness",
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Midpoint Ax`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Midpoint Ax`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Post Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(m2_mind_min = sum(Duration, na.rm = TRUE),
                 m2_mind_sess = n())
@@ -75,8 +75,8 @@ adherence_dat <-
     mo2_all <- dat %>%
       filter(`Participant Study ID` == .x,
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Midpoint Ax`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Midpoint Ax`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Post Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(m2_all_hs_sess = n())
 
@@ -84,8 +84,8 @@ adherence_dat <-
       filter(`Participant Study ID` == .x,
              `Mindfulness or Other (new column)` == "Mindfulness",
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`1-Mo F/U Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Post Ax`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`1-Mo F/U Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(m3_mind_min = sum(Duration, na.rm = TRUE),
                 m3_mind_sess = n())
@@ -93,8 +93,8 @@ adherence_dat <-
     mo3_all <- dat %>%
       filter(`Participant Study ID` == .x,
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`1-Mo F/U Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Post Ax`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`1-Mo F/U Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(m3_all_hs_sess = n())
 
@@ -102,8 +102,8 @@ adherence_dat <-
       filter(`Participant Study ID` == .x,
              `Mindfulness or Other (new column)` == "Mindfulness",
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Code Activation`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Post Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(t3_cum_mind_min = sum(Duration, na.rm = TRUE),
                 t3_cum_mind_sess = n())
@@ -111,8 +111,8 @@ adherence_dat <-
     t3_all <- dat %>%
       filter(`Participant Study ID` == .x,
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Post Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Code Activation`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Post Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(t3_all_hs_sess = n())
 
@@ -120,8 +120,8 @@ adherence_dat <-
       filter(`Participant Study ID` == .x,
              `Mindfulness or Other (new column)` == "Mindfulness",
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`1-Mo F/U Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Code Activation`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`1-Mo F/U Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(t4_cum_mind_min = sum(Duration, na.rm = TRUE),
                 t4_cum_mind_sess = n())
@@ -129,8 +129,8 @@ adherence_dat <-
     t4_all <- dat %>%
       filter(`Participant Study ID` == .x,
              between(`Sessions Time`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`Code Activation`,
-                     timeline_dat[timeline_dat$`Participant Study ID` == .x,]$`1-Mo F/U Ax`)) %>%
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`Code Activation`,
+                     timeline_dat[timeline_dat$`Participant Study ID` == .x,][1,]$`1-Mo F/U Ax`)) %>%
       group_by(`Participant Study ID`) %>%
       summarize(t4_all_hs_sess = n())
 
@@ -195,6 +195,9 @@ adherence_dat <- adherence_dat %>%
                           t3_avg_mind_sess_len,
                           t4_avg_mind_sess_len,
                           all_avg_mind_sess_len), .fns = ~ ifelse(is.nan(.x), 0, .x)))
+
+# remove last row, which is a dublicate
+adherence_dat <- adherence_dat[-nrow(adherence_dat),]
 
 # save csv file
 write_csv(adherence_dat, "adherence_metric_data.csv")
